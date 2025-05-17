@@ -1,0 +1,58 @@
+-- Library Management System Database
+
+-- Create Authors Table
+CREATE TABLE Authors (
+    AuthorID INT PRIMARY KEY AUTO_INCREMENT,
+    Name VARCHAR(100) NOT NULL,
+    BirthYear INT,
+    UNIQUE (Name)
+);
+
+-- Create Books Table
+CREATE TABLE Books (
+    BookID INT PRIMARY KEY AUTO_INCREMENT,
+    Title VARCHAR(200) NOT NULL,
+    AuthorID INT,
+    ISBN VARCHAR(20) UNIQUE,
+    PublishedYear INT,
+    FOREIGN KEY (AuthorID) REFERENCES Authors(AuthorID) ON DELETE SET NULL
+);
+
+-- Create Members Table
+CREATE TABLE Members (
+    MemberID INT PRIMARY KEY AUTO_INCREMENT,
+    FullName VARCHAR(100) NOT NULL,
+    Email VARCHAR(100) UNIQUE NOT NULL,
+    RegistrationDate DATE NOT NULL
+);
+
+-- Create BorrowTransactions Table
+CREATE TABLE BorrowTransactions (
+    TransactionID INT PRIMARY KEY AUTO_INCREMENT,
+    BookID INT,
+    MemberID INT,
+    BorrowDate DATE NOT NULL,
+    ReturnDate DATE,
+    FOREIGN KEY (BookID) REFERENCES Books(BookID) ON DELETE CASCADE,
+    FOREIGN KEY (MemberID) REFERENCES Members(MemberID) ON DELETE CASCADE
+);
+
+-- Create a sample data for testing
+-- Authors
+INSERT INTO Authors (Name, BirthYear) VALUES ('J.K. Rowling', 1965);
+INSERT INTO Authors (Name, BirthYear) VALUES ('George R.R. Martin', 1948);
+
+-- Books
+INSERT INTO Books (Title, AuthorID, ISBN, PublishedYear) VALUES 
+('Harry Potter and the Sorcerer\'s Stone', 1, '978-0439708180', 1997),
+('A Game of Thrones', 2, '978-0553103540', 1996);
+
+-- Members
+INSERT INTO Members (FullName, Email, RegistrationDate) VALUES 
+('Alice Smith', 'alice@example.com', '2023-01-15'),
+('Bob Johnson', 'bob@example.com', '2023-02-20');
+
+-- Borrow Transactions
+INSERT INTO BorrowTransactions (BookID, MemberID, BorrowDate) VALUES 
+(1, 1, '2023-05-01'),
+(2, 2, '2023-05-02');
